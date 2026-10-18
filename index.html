@@ -71,7 +71,11 @@
     /* Glass nav: the Dome's glass */
     .glass-nav { background: linear-gradient(180deg, rgba(255,255,255,.15), rgba(255,255,255,.05)); -webkit-backdrop-filter: blur(22px) saturate(1.5); backdrop-filter: blur(22px) saturate(1.5);
       box-shadow: 0 8px 32px rgba(0,0,0,.35); }
-    .glass-menu { background: rgba(255,255,255,.08); -webkit-backdrop-filter: blur(22px) saturate(1.5); backdrop-filter: blur(22px) saturate(1.5); box-shadow: 0 12px 40px rgba(0,0,0,.45); }
+    .glass-menu { background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.07)), rgba(10,14,17,.62); -webkit-backdrop-filter: blur(34px) saturate(1.6); backdrop-filter: blur(34px) saturate(1.6); box-shadow: 0 14px 44px rgba(0,0,0,.55); }
+    .glass-menu .nav-link { text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+    /* while the menu is open, everything behind it is dimmed and blurred */
+    .nav-scrim { position:fixed; inset:0; z-index:40; display:none; background:rgba(8,11,13,.45); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+    .nav-scrim.open { display:block; }
 
     /* Buttons: rounded glass, with the same shimmer reaction as the nav (the nav stays square, buttons stay round) */
     .btn { position:relative; overflow:hidden; isolation:isolate; display:inline-flex; align-items:center; justify-content:center; gap:.5rem; padding:.85rem 2rem; border-radius:9999px; font-weight:600; text-decoration:none;
@@ -135,6 +139,7 @@
       </div>
     </div>
   </nav>
+  <div id="nav-scrim" class="nav-scrim" aria-hidden="true"></div>
 
   <main id="main-content">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -266,9 +271,10 @@
 
   <script>
     // Menu: one item, "Stay connected"
-    const menuBtn = document.getElementById('menu-btn'), navMenu = document.getElementById('nav-menu');
+    const menuBtn = document.getElementById('menu-btn'), navMenu = document.getElementById('nav-menu'), navScrim = document.getElementById('nav-scrim');
     function setMenu(open) {
       navMenu.classList.toggle('hidden', !open);
+      navScrim.classList.toggle('open', open);
       menuBtn.setAttribute('aria-expanded', String(open));
       menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       const i = menuBtn.querySelector('i'); i.classList.toggle('fa-bars', !open); i.classList.toggle('fa-xmark', open);
